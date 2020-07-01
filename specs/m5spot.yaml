@@ -11,6 +11,7 @@ nodeGroups:
       project: zip
       lifecycle: Ec2Spot
       aws.amazon.com/spot: "true"
+      computetype: cpu
     maxSize: 50
     minSize: 1
     ssh:
@@ -25,6 +26,7 @@ nodeGroups:
       spotInstance: "true:PreferNoSchedule"
     tags:
       k8s.io/cluster-autoscaler/node-template/label/lifecycle: Ec2Spot
+      k8s.io/cluster-autoscaler/node-template/label/computetype: cpu
       k8s.io/cluster-autoscaler/node-template/label/project: zip
       k8s.io/cluster-autoscaler/node-template/taint/spotInstance: "true:PreferNoSchedule"
       k8s.io/cluster-autoscaler/node-template/label/aws.amazon.com/spot: "true"
