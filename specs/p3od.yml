@@ -9,6 +9,7 @@ nodeGroups:
   - name: p3od
     labels:  
       project: zip
+      computetype: gpu
     maxSize: 10
     minSize: 0
     ssh:
@@ -18,6 +19,7 @@ nodeGroups:
       instanceTypes: ["p3.2xlarge","p3.8xlarge"]
     tags:
       k8s.io/cluster-autoscaler/node-template/label/project: zip
+      k8s.io/cluster-autoscaler/node-template/label/computetype: gpu
     iam:
       withAddonPolicies:
         autoScaler: true
