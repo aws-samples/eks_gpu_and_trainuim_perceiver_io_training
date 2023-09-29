@@ -3,13 +3,8 @@
 
 We started with a standalone instance (trn1n, p4d, g5) that downloads the kinetics datasets to the instance local NVMe SSD storage, prepares the data, train and evaluate a model. Later, we improved the process by enabling training to resume from unlikely interruptions by storing the dataset and training state on [Amazon FSx](https://aws.amazon.com/fsx/) to resolve the data loading performance bottlenecks of the training. Finally, we use [Volcano](https://volcano.sh), a Kubernetes native batch scheduler, to improve training orchestration. 
 
-## EKS cluster setup
-* [Install aws-CLI, eksctl, and kubctl tools](https://docs.aws.amazon.com/eks/latest/userguide/create-cluster.html). 
-
-* Deploy the cluster with a spot-based node group (ASG) to host the application control-plane, Kubeflow. 
-
-`eksctl create cluster -f=specs/cluster.yaml` 
-
+## Setup
+* 
 * Deploy P3 Spot-based mixed instances node-group.
 
 `eksctl create cluster --config-file=specs/p3spot.yml`
