@@ -1,5 +1,5 @@
 # EKS GPU and Trainuim Perceiver IO training 
-Perceiver IO is a generalization of Perceiver to handle arbitrary outputs and arbitrary inputs. This example shows how to produce multimodal videos with audio using the [Kinetics](https://www.deepmind.com/open-source/kinetics) dataset on [AWS Trainium](https://aws.amazon.com/machine-learning/trainium/) and [EC2 GPU] instances (https://aws.amazon.com/nvidia/) orchestrated by [EKS](https://aws.amazon.com/eks/) and launched by [Karpenter](https://karpenter.sh)
+Perceiver IO is a generalization of Perceiver to handle arbitrary outputs and arbitrary inputs. This example shows how to produce multimodal videos with audio using the [Kinetics](https://www.deepmind.com/open-source/kinetics) dataset on [AWS Trainium](https://aws.amazon.com/machine-learning/trainium/) and [EC2 GPU](https://aws.amazon.com/nvidia/) instances orchestrated by [EKS](https://aws.amazon.com/eks/) and launched by [Karpenter](https://karpenter.sh)
 
 It is necessary to plan your application's build-time, deployment-time, and run-time to make it flexible with CPU and AI accelerators.   
 
@@ -12,6 +12,9 @@ At deploy-time, we use Karpenter to simplify deployment by specifying a single d
 ## Setup
 * [Create EKS cluster and deploy Karpenter](https://karpenter.sh/docs/getting-started/getting-started-with-karpenter/) 
 * Deploy Karpenter provisioner for Trainuim
+  ```bash
+  kubectl apply -f amd-neuron-provisioner.yaml
+  ```
 * Deploy Karpenter provisioner for NVDIA-based instances
 * Deploy FSx for Lustre [CSI driver](https://docs.aws.amazon.com/eks/latest/userguide/fsx-csi.html)
 * Deploy the [Volcano CRD](https://volcano.sh/en/docs/installation/)
@@ -81,3 +84,9 @@ Namespace(batch_size=1, config_file_path='config/main.yaml', dataset='kinetics-s
 
   View the neuron-top to observe the neuron core usage.
   ![neuron-top](./img/neuron-top.png)
+
+* Deploy training job on G5 or P5 instances
+TBD
+
+* Deploy training job on G5g
+TBD
