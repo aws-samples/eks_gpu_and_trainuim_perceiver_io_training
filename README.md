@@ -3,6 +3,8 @@
 
 We started with a standalone instance (trn1n, p4d, g5) that downloads the kinetics datasets to the instance local NVMe SSD storage, prepares the data, train and evaluate a model. Later, we improved the process by enabling training to resume from unlikely interruptions by storing the dataset and training state on [Amazon FSx](https://aws.amazon.com/fsx/) to resolve the data loading performance bottlenecks of the training. Finally, we use [Volcano](https://volcano.sh), a Kubernetes native batch scheduler, to improve training orchestration. 
 
+We demonstrate how to simplify the build process by using a single Docker image for Trainuim and GPU instances. We start with [AWS Deep Learning AMI](https://docs.aws.amazon.com/dlami/) on Amazon Linux or Ubuntu, preinstalled with popular deep learning frameworks. Then we build a Docker image that supports x86/AMD instances such as G5, P4, and Trn/Inf, as well as Graviton-based instances such as G5g. To abstract the AI accelerator chips, we use [Python venv](https://docs.python.org/3/tutorial/venv.html). CUDA for P and G instances and Neuron SDK for Trn and Inf instances.
+
 ## Setup
 * 
 * Deploy P3 Spot-based mixed instances node-group.
