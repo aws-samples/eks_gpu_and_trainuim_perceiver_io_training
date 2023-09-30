@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: perceiver-trn
+spec:
+  template:
+    spec:
+      nodeSelector:
+        karpenter.sh/provisioner-name: amd-neuron
+      containers:
+      - name: app
+        #image: 133573815653.dkr.ecr.us-west-2.amazonaws.com/perceiver:multiarch-ubuntu
+        image: 133573815653.dkr.ecr.us-west-2.amazonaws.com/perceiver:amd64
+        imagePullPolicy: Always
+        command: ["/start.sh"]
+        #resources:
+        #  limits:
+        #    aws.amazon.com/neuroncore: 32
+        env:
+        - name: DATASET_DIR
+          value: "/dataset"
+        - name: AWS_NEURON_VISIBLE_DEVICES
+          value: "ALL"
+      restartPolicy: Never
+  backoffLimit: 1
