@@ -5,6 +5,8 @@ We started with a standalone instance (trn1n, p4d, g5) that downloads the kineti
 
 We demonstrate how to simplify the build process by using a single Docker image for Trainuim and GPU instances. We start with [AWS Deep Learning AMI](https://docs.aws.amazon.com/dlami/) on Amazon Linux or Ubuntu, preinstalled with popular deep learning frameworks. Then we build a Docker image that supports x86/AMD instances such as G5, P4, and Trn/Inf, as well as Graviton-based instances such as G5g. To abstract the AI accelerator chips, we use [Python venv](https://docs.python.org/3/tutorial/venv.html). CUDA for P and G instances and Neuron SDK for Trn and Inf instances.
 
+We describe how to simplify deployment by specifying a single deployment specification for the training job and using Karpenter to prioritize instance types based on availability and cost. For example, we use a Karpenter provisioner for Trn instances and another provisioner for GPU instances. The `.spec.weight` indicates the priority we want to set for each instance type. We can set more granular instance types by adding another Karpenter for G5G, which is a Graviton-based instance with NVIDIA T4G Tensor Core.    
+
 ## Setup
 * 
 * Deploy P3 Spot-based mixed instances node-group.
