@@ -89,14 +89,13 @@ RUN /install-neuron.sh
 
 WORKDIR /
 
-#RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python get-pip.py && python -m pip install --upgrade pip
 RUN python3 --version
-#RUN until apt-get update --fix-missing; do echo "Retrying apt-get update"; sleep 1; done \
-# && apt-get install -y --no-install-recommends \
-#    python3-full \
-#    --fix-missing \
-# && rm -rf /var/lib/apt/lists/* \
-# && apt-get clean
+RUN until apt-get update --fix-missing; do echo "Retrying apt-get update"; sleep 1; done \
+ && apt-get install -y --no-install-recommends \
+    python3-pip \
+    --fix-missing \
+ && rm -rf /var/lib/apt/lists/* \
+ && apt-get clean
 RUN python3 -m pip install --user pipx \
  && python3 -m pipx ensurepath
 
