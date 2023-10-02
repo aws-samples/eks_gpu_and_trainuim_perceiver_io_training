@@ -60,20 +60,17 @@ RUN until apt-get update --fix-missing; do echo "Retrying apt-get update"; sleep
     pciutils \
     python3.8-full \
     python3.8-dev \
-    linux-aws \
     --fix-missing \
  && rm -rf /var/lib/apt/lists/* \
  && apt-get clean
-
-RUN apt-get install -y gcc make linux-headers-$(uname -r)
 
 RUN echo "deb $APT_REPO focal main" > /etc/apt/sources.list.d/neuron.list
 RUN wget -qO - $APT_REPO/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | apt-key add -
 
 ADD install-neuron.sh /install-neuron.sh
 RUN /install-neuron.sh
-ADD install-nvidia.sh /install-nvidia.sh
-RUN /install-nvidia.sh
+#ADD install-nvidia.sh /install-nvidia.sh
+#RUN /install-nvidia.sh
 #RUN apt-get update \
 # && if apt-cache show aws-neuronx-tools &>/dev/null; then \
 #      apt-get install -y \
