@@ -93,7 +93,6 @@ RUN /install-neuron.sh
 WORKDIR /
 
 #RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python get-pip.py && python -m pip install --upgrade pip
-RUN python --version
 RUN python3 --version
 
 RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python3
