@@ -134,7 +134,8 @@ RUN ${PIP} install --no-cache-dir -U \
     'attrs>=20.3.0,<22.0.0' \
     'protobuf>=2.9.2,<3.20' \
     'docutils>=0.10,<0.17' \
-    "python-etcd"
+    "python-etcd" \
+    --break-system-packages
 
 # Clean up after apt update
 RUN rm -rf /var/lib/apt/lists/* \
