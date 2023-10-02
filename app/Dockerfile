@@ -72,6 +72,8 @@ RUN wget -qO - $APT_REPO/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | apt-key add -
 
 ADD install-neuron.sh /install-neuron.sh
 RUN /install-neuron.sh
+ADD install-nvidia.sh /install-nvidia.sh
+RUN /install-nvidia.sh
 #RUN apt-get update \
 # && if apt-cache show aws-neuronx-tools &>/dev/null; then \
 #      apt-get install -y \
