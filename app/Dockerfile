@@ -103,19 +103,19 @@ RUN ${PIP} install --no-cache-dir -U \
     tensorboard \
     scipy \
     click \
-    "cryptography>3.2" \
-    psutil==5.6.7 \
+    cryptography \
+    psutil \
     dataset \
     av \
     imageio \
-    "lightning>=2.0.2" \
-    "fvcore>=0.1.5" \
-    "torch==1.13.1" \
-    "torchvision==0.14.1" \
-    "transformers>=4.29.2" \
-    "transformers>=4.29.2" \
-    "huggingface-hub>=0.15.1" \
-    "fvcore>=0.1.5" \
+    lightning \
+    fvcore \
+    torch \
+    torchvision \
+    transformers \
+    transformers \
+    huggingface-hub \
+    fvcore \
     Pillow \
     --break-system-packages
 
