@@ -5,7 +5,7 @@
 #    docker run -it --device=/dev/neuron0 neuron-container:pytorch
 
 FROM public.ecr.aws/docker/library/ubuntu:23.10
-ARG PIP="python3.10 -m pip"
+ARG PIP="python -m pip"
 
 # This arg required to stop docker build waiting for region configuration while installing tz data from ubuntu 20
 ARG DEBIAN_FRONTEND=noninteractive
@@ -47,7 +47,7 @@ RUN until apt-get update --fix-missing; do echo "Retrying apt-get update"; sleep
     jq \
     libopencv-dev \
     libglib2.0-0 \
-    libgl1-mesa-glx \
+    #libgl1-mesa-glx \
     libsm6 \
     libxext6 \
     libxrender-dev \
