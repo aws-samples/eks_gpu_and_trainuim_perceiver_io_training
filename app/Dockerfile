@@ -65,6 +65,7 @@ RUN until apt-get update --fix-missing; do echo "Retrying apt-get update"; sleep
     gpg-agent \
     pciutils \
     python3-full \
+    python3-pip \
     --fix-missing \
  && rm -rf /var/lib/apt/lists/* \
  && apt-get clean
@@ -115,7 +116,8 @@ RUN ${PIP} install --no-cache-dir -U \
     "transformers>=4.29.2" \
     "huggingface-hub>=0.15.1" \
     "fvcore>=0.1.5" \
-    'Pillow>=9.0.1,<9.1.0'
+    'Pillow>=9.0.1,<9.1.0' \
+    --break-system-packages
 
 RUN mkdir -p /etc/pki/tls/certs && cp /etc/ssl/certs/ca-certificates.crt /etc/pki/tls/certs/ca-bundle.crt
 
