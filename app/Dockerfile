@@ -32,10 +32,6 @@ RUN until apt-get update --fix-missing; do echo "Retrying apt-get update"; sleep
     software-properties-common \
  && rm -rf /var/lib/apt/lists/* \
  && apt-get clean
-
-#RUN add-apt-repository ppa:deadsnakes/ppa
-#RUN apt install -y python3
-RUN python3 --version
     
 RUN until apt-get update --fix-missing; do echo "Retrying apt-get update"; sleep 1; done \
  && apt-get install -y --no-install-recommends \
@@ -68,6 +64,7 @@ RUN until apt-get update --fix-missing; do echo "Retrying apt-get update"; sleep
     gnupg2 \
     gpg-agent \
     pciutils \
+    python3-full \
     --fix-missing \
  && rm -rf /var/lib/apt/lists/* \
  && apt-get clean
