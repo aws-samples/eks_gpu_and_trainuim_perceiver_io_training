@@ -29,6 +29,15 @@ ENV LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/local/lib"
 
 RUN until apt-get update --fix-missing; do echo "Retrying apt-get update"; sleep 1; done \
  && apt-get install -y --no-install-recommends \
+    software-properties-common \
+ && rm -rf /var/lib/apt/lists/* \
+ && apt-get clean
+
+RUN add-apt-repository ppa:deadsnakes/ppa
+RUN apt install -y python3.10
+    
+RUN until apt-get update --fix-missing; do echo "Retrying apt-get update"; sleep 1; done \
+ && apt-get install -y --no-install-recommends \
     build-essential \
     ca-certificates \
     cmake \
@@ -58,8 +67,6 @@ RUN until apt-get update --fix-missing; do echo "Retrying apt-get update"; sleep
     gnupg2 \
     gpg-agent \
     pciutils \
-    python3.10-full \
-    python3.10-dev \
     --fix-missing \
  && rm -rf /var/lib/apt/lists/* \
  && apt-get clean
