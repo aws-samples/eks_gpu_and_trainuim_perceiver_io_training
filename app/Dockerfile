@@ -93,6 +93,8 @@ RUN /install-neuron.sh
 WORKDIR /
 
 #RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python get-pip.py && python -m pip install --upgrade pip
+RUN apt install -y python3.11 python3.11-distutils \
+ && curl -sS https://bootstrap.pypa.io/get-pip.py | python3.11
 
 RUN ${PIP} --version
 RUN ${PIP} install --no-cache-dir -U \
