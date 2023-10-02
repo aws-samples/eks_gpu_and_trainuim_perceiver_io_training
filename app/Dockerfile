@@ -92,7 +92,7 @@ RUN /install-neuron.sh
 
 WORKDIR /
 
-RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python get-pip.py && python -m pip install --upgrade pip
+#RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python get-pip.py && python -m pip install --upgrade pip
 
 RUN ${PIP} install --no-cache-dir -U \
     "pyyaml>=5.4,<5.5" \
