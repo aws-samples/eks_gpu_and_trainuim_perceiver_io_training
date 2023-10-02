@@ -4,7 +4,7 @@
 # To run on EC2 Inf1 instances with AWS DLAMI:
 #    docker run -it --device=/dev/neuron0 neuron-container:pytorch
 
-FROM public.ecr.aws/docker/library/ubuntu:20.04
+FROM public.ecr.aws/docker/library/ubuntu:23.10
 ARG PIP="python3.8 -m pip"
 
 # This arg required to stop docker build waiting for region configuration while installing tz data from ubuntu 20
