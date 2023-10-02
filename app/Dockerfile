@@ -94,9 +94,9 @@ RUN python3 --version
 
 RUN ${PIP} --version
 RUN ${PIP} install --no-cache-dir -U \
-    "pyyaml>=5.4,<5.5" \
-    "bokeh>=2.3,<3" \
-    "opencv-python>=4.6,<5" \
+    pyyaml \
+    bokeh \
+    opencv-python \
     awscli \
     einops \
     poetry \
@@ -116,7 +116,7 @@ RUN ${PIP} install --no-cache-dir -U \
     "transformers>=4.29.2" \
     "huggingface-hub>=0.15.1" \
     "fvcore>=0.1.5" \
-    'Pillow>=9.0.1,<9.1.0' \
+    Pillow \
     --break-system-packages
 
 RUN mkdir -p /etc/pki/tls/certs && cp /etc/ssl/certs/ca-certificates.crt /etc/pki/tls/certs/ca-bundle.crt
