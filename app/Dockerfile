@@ -65,6 +65,7 @@ RUN until apt-get update --fix-missing; do echo "Retrying apt-get update"; sleep
     gpg-agent \
     pciutils \
     python3-full \
+    python3-dev \
     python3-pip \
     --fix-missing \
  && rm -rf /var/lib/apt/lists/* \
