@@ -104,7 +104,6 @@ RUN ${PIP} install --no-cache-dir -U \
     scipy \
     click \
     cryptography \
-    psutil \
     dataset \
     av \
     imageio \
