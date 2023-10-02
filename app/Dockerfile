@@ -5,7 +5,7 @@
 #    docker run -it --device=/dev/neuron0 neuron-container:pytorch
 
 FROM public.ecr.aws/docker/library/ubuntu:23.10
-ARG PIP="pipx"
+ARG PIP="python3-pip"
 
 # This arg required to stop docker build waiting for region configuration while installing tz data from ubuntu 20
 ARG DEBIAN_FRONTEND=noninteractive
@@ -90,14 +90,6 @@ RUN /install-neuron.sh
 WORKDIR /
 
 RUN python3 --version
-RUN until apt-get update --fix-missing; do echo "Retrying apt-get update"; sleep 1; done \
- && apt-get install -y --no-install-recommends \
-    python3-pip \
-    --fix-missing \
- && rm -rf /var/lib/apt/lists/* \
- && apt-get clean
-RUN python3 -m pip install --user pipx \
- && python3 -m pipx ensurepath
 
 RUN ${PIP} --version
 RUN ${PIP} install --no-cache-dir -U \
