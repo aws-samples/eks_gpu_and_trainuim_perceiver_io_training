@@ -33,7 +33,7 @@ RUN until apt-get update --fix-missing; do echo "Retrying apt-get update"; sleep
  && rm -rf /var/lib/apt/lists/* \
  && apt-get clean
 
-RUN add-apt-repository ppa:deadsnakes/ppa
+#RUN add-apt-repository ppa:deadsnakes/ppa
 RUN apt install -y python3.10
     
 RUN until apt-get update --fix-missing; do echo "Retrying apt-get update"; sleep 1; done \
