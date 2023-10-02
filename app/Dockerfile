@@ -91,7 +91,12 @@ WORKDIR /
 
 #RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python get-pip.py && python -m pip install --upgrade pip
 RUN python3 --version
-
+RUN until apt-get update --fix-missing; do echo "Retrying apt-get update"; sleep 1; done \
+ && apt-get install -y --no-install-recommends \
+    python3-full \
+    --fix-missing \
+ && rm -rf /var/lib/apt/lists/* \
+ && apt-get clean
 RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python3
 
 RUN ${PIP} --version
@@ -99,7 +104,7 @@ RUN ${PIP} install --no-cache-dir -U \
     "pyyaml>=5.4,<5.5" \
     "bokeh>=2.3,<3" \
     "opencv-python>=4.6,<5" \
-    "awscli<2" \
+    awscli \
     einops \
     poetry \
     tensorboard \
@@ -119,7 +124,6 @@ RUN ${PIP} install --no-cache-dir -U \
     "huggingface-hub>=0.15.1" \
     "fvcore>=0.1.5" \
     'Pillow>=9.0.1,<9.1.0'
-
 
 RUN mkdir -p /etc/pki/tls/certs && cp /etc/ssl/certs/ca-certificates.crt /etc/pki/tls/certs/ca-bundle.crt
 
