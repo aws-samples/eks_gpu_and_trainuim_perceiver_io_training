@@ -33,11 +33,7 @@ At deploy-time, we use Karpenter to simplify deployment by specifying a single d
 The build process creates OCI images for x86-based instances. You add another build step to create OCI images for Graviton-based instances. This new build process creates a OCI image manifest list that references both OCI images. The container runtime (Docker Engine or containerd) will pull the correct platform-specific image at deployment time. To automate the OCI image build process, we use AWS CodePipeline. AWS CodePipeline starts by building a OCI image from the code in AWS CodeBuild that is pushed to Amazon Elastic Container Registry (Amazon ECR). 
 ![build process](./img/app-build-process.png)
 
-* Deploy the CI-pipeline of the perceiver IO image
-  ```bash
-  cd ci-build
-  ./deploy-pipeline.sh
-  ```
+* [Deploy the CI-pipeline of the perceiver IO image](./ci-build)
 
 ## Deploy the training jobs on Trainuim 
 We used the GLUE benchmark for hyperparameters settings ([Table 1 - Perceiver IO on language](https://arxiv.org/pdf/2107.14795.pdf)) for `SPS = train-time steps per second. M = # inputs and N = # latents` in [config/main.yaml](./app/config/main.yaml) and [perceiver-trn-job.yaml](./perceiver-trn-job.yaml). 
