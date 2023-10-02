@@ -31,6 +31,7 @@ At deploy-time, we use Karpenter to simplify deployment by specifying a single d
 
 ## Build the perceiver IO image
 The build process creates OCI images for x86-based instances. You add another build step to create OCI images for Graviton-based instances. This new build process creates a OCI image manifest list that references both OCI images. The container runtime (Docker Engine or containerd) will pull the correct platform-specific image at deployment time. To automate the OCI image build process, we use AWS CodePipeline. AWS CodePipeline starts by building a OCI image from the code in AWS CodeBuild that is pushed to Amazon Elastic Container Registry (Amazon ECR). 
+
 ![build process](./img/app-build-process.png)
 
 * [Deploy the CI-pipeline of the perceiver IO image](./ci-build)
