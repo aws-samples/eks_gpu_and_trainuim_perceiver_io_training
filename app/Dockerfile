@@ -15,5 +15,5 @@ RUN wget https://developer.download.nvidia.com/compute/cuda/repos/wsl-ubuntu/x86
 # && dpkg -i cuda-keyring_1.1-1_all.deb \
 RUN apt-get update -y && apt-get install -y cuda
 
-RUN ls -l $CUDA_HOME
+RUN ls -l /usr/local/cuda
 RUN ls -l /usr/local/cuda/bin
