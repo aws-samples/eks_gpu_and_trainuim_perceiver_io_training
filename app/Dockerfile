@@ -111,7 +111,7 @@ RUN ${PIP} install --no-cache-dir -U \
     lightning \
     fvcore \
     torch \
-    "torchvision==0.15.2" \
+    torchvision \
     transformers \
     huggingface-hub \
     fvcore \
