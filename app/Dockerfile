@@ -110,7 +110,7 @@ RUN ${PIP} install --no-cache-dir -U \
     imageio \
     lightning \
     fvcore \
-    "torch==1.13.1" \
+    "torch==2.0.1" \
     "torchvision==0.15.2" \
     transformers \
     huggingface-hub \
