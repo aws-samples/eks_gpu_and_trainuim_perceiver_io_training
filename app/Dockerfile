@@ -12,4 +12,9 @@ RUN wget https://developer.download.nvidia.com/compute/cuda/repos/wsl-ubuntu/x86
  && mv cuda-wsl-ubuntu.pin /etc/apt/preferences.d/cuda-repository-pin-600 
 # && dpkg -i cuda-keyring_1.1-1_all.deb \
 RUN apt-get update -y && apt-get install -y cuda
+RUN export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64 \
+ && export PATH=$PATH:/usr/local/cuda/bin \
+ && export CUDA_HOME=$CUDA_HOME:/usr/local/cuda
+
+
 RUN nvidia-smi
