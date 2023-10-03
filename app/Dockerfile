@@ -5,5 +5,7 @@ RUN apt-get update -y && apt-get install -y wget
 RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/cross-linux-sbsa/cuda-keyring_1.1-1_all.deb \
  && dpkg -i cuda-keyring_1.1-1_all.deb \
  && cp cuda-keyring_1.1-1_all.deb /usr/share/keyrings/ \
- && ls /var/
+ && wget https://developer.download.nvidia.com/compute/cuda/repos/wsl-ubuntu/x86_64/cuda-wsl-ubuntu.pin \
+ && ls -l /etc/apt/preferences.d/ \
+ && ls -l /var/
 #RUN apt-get update -y && apt-get install -y cuda
