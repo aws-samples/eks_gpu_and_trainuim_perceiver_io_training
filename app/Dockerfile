@@ -1,4 +1,4 @@
-FROM public.ecr.aws/docker/library/ubuntu:22.04
+FROM public.ecr.aws/docker/library/ubuntu:20.04
 
 RUN uname -a
 RUN apt-get update -y && apt-get install -y wget python3.8-venv g++
