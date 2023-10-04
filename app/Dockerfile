@@ -2,7 +2,7 @@ FROM public.ecr.aws/docker/library/ubuntu:22.04
 
 RUN uname -a
 RUN apt-get update --fix-missing
-RUN apt-get install -y wget
+RUN apt-get install -y wget gnupg2
 #RUN until apt-get update --fix-missing; do echo "Retrying apt-get update"; sleep 1; done \
 # && apt-get install -y --no-install-recommends \
 # && wget \
