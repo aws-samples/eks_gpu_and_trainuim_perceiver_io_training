@@ -20,3 +20,4 @@ RUN /install-pytorch-nvidia.sh
 COPY * /
 RUN mkdir /config
 ADD config/main.yaml /config/main.yaml
+RUN ls -l /
