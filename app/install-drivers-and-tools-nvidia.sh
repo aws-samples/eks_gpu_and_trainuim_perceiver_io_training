@@ -20,5 +20,5 @@ if [ "$(uname -i)" = "aarch64" ]; then
   echo "deb [signed-by=/usr/share/keyrings/cuda-archive-keyring.gpg] https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/cross-linux-sbsa/ /" | tee /etc/apt/sources.list.d/cuda-wsl-ubuntu-arm64.list 
   wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/cross-linux-sbsa/cuda-ubuntu2204.pin
   mv cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600
-  apt-get update -y && apt-get install -y cuda-cross-aarch64
+  apt-get update -y && apt-get install -y cuda
 fi
