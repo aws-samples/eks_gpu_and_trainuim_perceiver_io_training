@@ -23,4 +23,5 @@ if [ "$(uname -i)" = "x86_64" ]; then
   # Install PyTorch Neuron
   python -m pip install torch-neuron neuron-cc[tensorflow] "protobuf" torchvision
   pip install -r requirements.txt
+  deactivate
 fi
