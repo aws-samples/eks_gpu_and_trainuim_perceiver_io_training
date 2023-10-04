@@ -2,7 +2,6 @@ FROM public.ecr.aws/docker/library/ubuntu:20.04
 
 RUN uname -a
 RUN apt-get update -y && apt-get install -y wget python3.8-venv g++
-RUN python3.8 -m pip install -U pip 
 RUN python3.8 -m venv aws_neuron_venv_pytorch 
 RUN . aws_neuron_venv_pytorch/bin/activate
 RUN python -m pip install -U pip 
