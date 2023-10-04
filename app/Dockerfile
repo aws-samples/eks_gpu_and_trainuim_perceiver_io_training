@@ -16,3 +16,7 @@ RUN /install-drivers-and-tools-nvidia.sh
 
 ADD install-pytorch-nvidia.sh /install-pytorch-nvidia.sh
 RUN /install-pytorch-nvidia.sh
+
+COPY * /
+RUN mkdir /config
+ADD config/main.yaml /config/main.yaml
