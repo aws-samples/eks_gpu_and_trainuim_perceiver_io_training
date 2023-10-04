@@ -1,20 +1,15 @@
 #!/bin/bash -x
 
-cat << EOF | tee --append /etc/modprobe.d/blacklist.conf
-blacklist vga16fb
-blacklist nouveau
-blacklist rivafb
-blacklist nvidiafb
-blacklist rivatv
-EOF
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/cuda/lib64"
+export PATH="$PATH:/usr/local/cuda/bin"
+export CUDA_HOME="$CUDA_HOME:/usr/local/cuda"
 
-GRUB_CMDLINE_LINUX="rdblacklist=nouveau"
-update-grub
-aws s3 cp --recursive s3://ec2-linux-nvidia-drivers/latest/ .
-aws s3 ls --recursive s3://ec2-linux-nvidia-drivers/
-chmod +x NVIDIA-Linux-x86_64*.run
-/bin/sh ./NVIDIA-Linux-x86_64*.run
-nvidia-smi -q | head
-touch /etc/modprobe.d/nvidia.conf
-echo "options nvidia NVreg_EnableGpuFirmware=0" | tee --append /etc/modprobe.d/nvidia.conf
-apt-get install -y lightdm ubuntu-desktop
+if [ "$(uname -i)" = "x86_64" ]; then
+  apt-get update -y && apt-get install -y wget
+  wget https://developer.download.nvidia.com/compute/cuda/repos/wsl-ubuntu/x86_64/cuda-wsl-ubuntu-keyring.gpg 
+  mv cuda-wsl-ubuntu-keyring.gpg /usr/share/keyrings/cuda-wsl-ubuntu-keyring.gpg 
+  echo "deb [signed-by=/usr/share/keyrings/cuda-wsl-ubuntu-keyring.gpg] https://developer.download.nvidia.com/compute/cuda/repos/wsl-ubuntu/x86_64/ /" | tee /etc/apt/sources.list.d/cuda-wsl-ubuntu-x86_64.list 
+  wget https://developer.download.nvidia.com/compute/cuda/repos/wsl-ubuntu/x86_64/cuda-wsl-ubuntu.pin 
+  mv cuda-wsl-ubuntu.pin /etc/apt/preferences.d/cuda-repository-pin-600
+  apt-get update -y && apt-get install -y cuda
+fi
