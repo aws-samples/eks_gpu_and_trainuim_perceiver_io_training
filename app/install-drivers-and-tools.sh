@@ -12,7 +12,7 @@ EOF
   apt-get update -y
 
   # Install git 
-  apt-get install python3-dev python3-full gnupg2 jq git -y
+  apt-get install python3-dev python3-full jq git -y
 
   # install Neuron Driver
   apt-get install aws-neuronx-dkms=2.* -y
