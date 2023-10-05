@@ -1,5 +1,4 @@
-#FROM public.ecr.aws/docker/library/ubuntu:22.04
-FROM 763104351884.dkr.ecr.us-east-1.amazonaws.com/pytorch-training:2.0.1-gpu-py310-cu121-ubuntu20.04-ec2
+FROM 133573815653.dkr.ecr.us-west-2.amazonaws.com/perceiver:2.0.1-gpu-py310-cu121-ubuntu20.04-ec2
 
 RUN uname -a
 RUN apt-get update --fix-missing
