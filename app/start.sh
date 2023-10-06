@@ -38,6 +38,7 @@ if [[ $instance_type == "trn1n.32xlarge" ]]; then
   echo "in start.sh before  /home/ubuntu/prep_dataset.sh"
   /prep_dataset.sh
   echo "in start.sh before  /home/ubuntu/train_kinetics_trn.sh"
+  . aws_neuron_venv_pytorch_inf1/bin/activate
   /train_kinetics_trn.sh
 fi
 
