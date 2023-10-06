@@ -14,7 +14,7 @@ mkdir -p $DATASET_DIR/val
 mkdir -p /root/.torch/vision/datasets/kinetics/
 aws s3 cp s3://deepmind-kinetics/1723303957.pt /root/.torch/vision/datasets/kinetics/
 aws s3 cp s3://deepmind-kinetics/c785d04824.pt /root/.torch/vision/datasets/kinetics/
-
+exit 0
 cd $DATASET_DIR/train
 
 for (( i=1;i<=9;i++ )); do wget "https://s3.amazonaws.com/kinetics/700_2020/train/k700_train_00"$i".tar.gz"; tar xzf "k700_train_00"$i".tar.gz"; done
