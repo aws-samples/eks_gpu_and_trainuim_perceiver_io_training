@@ -1,4 +1,4 @@
-FROM 133573815653.dkr.ecr.us-west-2.amazonaws.com/perceiver:2.0.1-gpu-py310-cu121-ubuntu20.04-ec2
+FROM 133573815653.dkr.ecr.us-west-2.amazonaws.com/perceiver:2.0.1-cpu-py310-ubuntu20.04-ec2
 
 RUN uname -a
 RUN apt-get update --fix-missing
