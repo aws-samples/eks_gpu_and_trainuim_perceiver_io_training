@@ -21,7 +21,7 @@ if [ "$(uname -i)" = "x86_64" ]; then
   python -m pip config set global.extra-index-url https://pip.repos.neuron.amazonaws.com
 
   # Install PyTorch Neuron
-  python -m pip install torch-neuron neuron-cc[tensorflow] "protobuf" torchvision
+  python -m pip install torch-neuronx neuron-cc[tensorflow] "protobuf" torchvision
   pip install -r requirements.txt
   deactivate
 fi
