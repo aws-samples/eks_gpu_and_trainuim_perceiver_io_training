@@ -22,7 +22,7 @@ if [ "$(uname -i)" = "x86_64" ]; then
 
   # Install PyTorch Neuron
   #python -m pip install torch-neuron neuron-cc[tensorflow] "protobuf" torchvision
-  python -m pip install --force-reinstall torch-neuronx==1.13.0.* neuronx-cc==2.* --extra-index-url https://pip.repos.neuron.amazonaws.com
+  python -m pip install --force-reinstall torch-neuronx==1.13.1.* neuronx-cc==2.* --extra-index-url https://pip.repos.neuron.amazonaws.com
   pip install -r requirements.txt
   deactivate
 fi
