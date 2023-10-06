@@ -34,11 +34,9 @@ if [[ $instance_type == "trn1n.32xlarge" ]]; then
   echo "export PATH=/opt/aws/neuron/bin:\$PATH" >> /root/.bashrc
   echo "export TERM=screen" >> /root/.bashrc
   . /root/.bashrc
-  . aws_neuron_venv_pytorch_inf1/bin/activate
   echo "in start.sh before  /home/ubuntu/prep_dataset.sh"
   /prep_dataset.sh
   echo "in start.sh before  /home/ubuntu/train_kinetics_trn.sh"
-  . aws_neuron_venv_pytorch_inf1/bin/activate
   /train_kinetics_trn.sh
 fi
 

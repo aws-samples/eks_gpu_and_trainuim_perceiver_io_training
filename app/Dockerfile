@@ -16,8 +16,8 @@ ADD requirements.txt /requirements.txt
 
 #ADD install-pytorch-nvidia.sh /install-pytorch-nvidia.sh
 #RUN /install-pytorch-nvidia.sh
-
 COPY * /
+RUN pip install -r /requirements.txt
 RUN mkdir /config
 ADD config/main.yaml /config/main.yaml
 RUN ls -l /
