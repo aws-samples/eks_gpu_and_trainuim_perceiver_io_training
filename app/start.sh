@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 cd /
 
@@ -27,10 +27,7 @@ else
   exit
 fi
 pwd
-ls -l 
 if [[ $instance_type == "trn1n.32xlarge" ]]; then
-  #echo "in start.sh before  /home/ubuntu/post_build_neuron.sh"
-  #./home/ubuntu/post_build_neuron.sh
   echo "export PATH=/opt/aws/neuron/bin:\$PATH" >> /root/.bashrc
   echo "export TERM=screen" >> /root/.bashrc
   . /root/.bashrc
