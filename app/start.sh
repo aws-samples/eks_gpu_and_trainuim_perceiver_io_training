@@ -26,15 +26,14 @@ else
   echo $instance_type" is not supported, please use one of the instances in "$supported_instances
   exit
 fi
-pwd
-if [[ $instance_type == "trn1n.32xlarge" ]]; then
+echo "in start.sh before  prep_dataset.sh"
+/prep_dataset.sh
+if [[ $instance_type == "g5.xlarge" ]]; then
   echo "export PATH=/opt/aws/neuron/bin:\$PATH" >> /root/.bashrc
   echo "export TERM=screen" >> /root/.bashrc
   . /root/.bashrc
-  echo "in start.sh before  /home/ubuntu/prep_dataset.sh"
-  /prep_dataset.sh
-  echo "in start.sh before  /home/ubuntu/train_kinetics_trn.sh"
-  /train_kinetics_trn.sh
+  echo "in start.sh before  /train_kinetics_gpu.sh"
+  /train_kinetics_gpu.sh
 fi
 
 while true; do sleep 1000; done
