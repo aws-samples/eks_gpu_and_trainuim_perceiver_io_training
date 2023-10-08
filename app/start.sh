@@ -2,7 +2,7 @@
 
 cd /
 
-if [ -n "$SUPPORTED_INSTANCES" ]; then
+if [ -z "$SUPPORTED_INSTANCES" ]; then
   echo "need to know what instances are supported"
   echo "example export SUPPORTED_INSTANCES=trn1n.32xlarge,g5.16xlarge"
   exit
@@ -20,20 +20,24 @@ if [ -z "$instance_type" ]; then
 fi
 echo "instance_type="$instance_type
 
-if [[ $instance_type == *"$SUPPORTED_INSTANCES"* ]]; then
-  echo $instance_type" is supported"
-else
-  echo $instance_type" is not supported, please use one of the instances in "$supported_instances
-  exit
-fi
+#if [[ $instance_type == *"$SUPPORTED_INSTANCES"* ]]; then
+#  echo $instance_type" is supported"
+#else
+#  echo $instance_type" is not supported, please use one of the instances in "$supported_instances
+#  exit
+#fi
 echo "in start.sh before  prep_dataset.sh"
 /prep_dataset.sh
-if [[ $instance_type == "g5.xlarge" ]]; then
+if [[ $instance_type == "trn1n.32xlarge" ]]; then
   echo "export PATH=/opt/aws/neuron/bin:\$PATH" >> /root/.bashrc
   echo "export TERM=screen" >> /root/.bashrc
   . /root/.bashrc
-  echo "in start.sh before  /train_kinetics_gpu.sh"
+  /train_kinetics_trn.sh
+elif [[ $instance_type == "g5.xlarge" ]]; then
   /train_kinetics_gpu.sh
+else
+  echo $instance_type" is not supported"
+  exit
 fi
 
 while true; do sleep 1000; done
