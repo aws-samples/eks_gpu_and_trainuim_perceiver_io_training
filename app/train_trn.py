@@ -193,7 +193,6 @@ def train():
       model_to_save = model.module if hasattr(model, 'module') else model
       data = {'model': model_to_save.state_dict(),'epoch': epoch}
       cpu_data = xm._maybe_convert_to_cpu(data)
-      torch.save(cpu_data, chkpt_file)
       print('Checkpointing done...', flush=True)
       if is_root:
         step_throughput = throughput.get_throughput()
@@ -209,6 +208,7 @@ def train():
             writer)
       if global_step >= FLAGS.max_steps:
         xm.mark_step()
+        torch.save(cpu_data, chkpt_file)
         break
     return global_step, loss
 
