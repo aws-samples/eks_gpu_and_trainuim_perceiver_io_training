@@ -14,8 +14,9 @@ mkdir -p $DATASET_DIR/val
 mkdir -p /root/.torch/vision/datasets/kinetics/
 aws s3 cp s3://deepmind-kinetics/1723303957.pt /root/.torch/vision/datasets/kinetics/
 aws s3 cp s3://deepmind-kinetics/c785d04824.pt /root/.torch/vision/datasets/kinetics/
-aws s3 cp s3://deepmind-kinetics/var_tmp_neuron-compile-cache.tar.gz /var/tmp
-cd /var/tmp
+mkdir -p /var/tmp/neuron_compile_cache
+aws s3 cp s3://deepmind-kinetics/var_tmp_neuron-compile-cache.tar.gz /var/tmp/neuron_compile_cache
+cd /var/tmp/neuron_compile_cache
 tar -xvzf var_tmp_neuron-compile-cache.tar.gz
 cd $DATASET_DIR/train
 
