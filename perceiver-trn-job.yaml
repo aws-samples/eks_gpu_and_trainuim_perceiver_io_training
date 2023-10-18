@@ -7,19 +7,31 @@ spec:
     spec:
       nodeSelector:
         karpenter.sh/provisioner-name: amd-neuron
+      volumes:
+      - name: dshm
+        emptyDir:
+          medium: Memory
       containers:
       - name: app
-        #image: 133573815653.dkr.ecr.us-west-2.amazonaws.com/perceiver:multiarch-ubuntu
-        image: 133573815653.dkr.ecr.us-west-2.amazonaws.com/perceiver:amd64
+        image: 133573815653.dkr.ecr.us-west-2.amazonaws.com/perceiver:multiarch-ubuntu
         imagePullPolicy: Always
+        volumeMounts:
+          - mountPath: /dev/shm
+            name: dshm
         command: ["/start.sh"]
-        #resources:
-        #  limits:
-        #    aws.amazon.com/neuroncore: 32
+        resources:
+          limits:
+            aws.amazon.com/neuron: 16
         env:
         - name: DATASET_DIR
           value: "/dataset"
         - name: AWS_NEURON_VISIBLE_DEVICES
           value: "ALL"
-      restartPolicy: Never
-  backoffLimit: 1
+        - name: MALLOC_ARENA_MAX
+          value: "32"
+        - name: NPROC_PER_NODE
+          value: "32"
+        - name: MAX_STEPS
+          value: "100" 
+        - name: BATCH_SIZE
+          value: "1"

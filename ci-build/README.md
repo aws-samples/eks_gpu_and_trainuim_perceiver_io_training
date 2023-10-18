@@ -5,6 +5,10 @@
 ```bash
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --output text --query Account)
 export AWS_REGION=us-west-2
+export BASE_IMAGE_AMD_XLA_TAG=1.13.1-neuronx-py310-sdk2.14.1-ubuntu20.04
+export BASE_IMAGE_AMD_CUD_TAG=2.0.1-cpu-py310-ubuntu20.04-ec2
+export IMAGE_AMD_XLA_TAG=amd64-neuron
+export IMAGE_AMD_CUD_TAG=amd64-cuda
 export BASE_REPO=perceiver
 export BASE_TAG=multiarch-ubuntu
 export BASE_ARM_TAG=arm64

@@ -1,3 +1,5 @@
+#!/bin/bash -x
+
 python3 -m torch.distributed.run --nproc_per_node=1 train_gpu.py \
   --config_file_path config/main.yaml \
   --dataset kinetics-small \

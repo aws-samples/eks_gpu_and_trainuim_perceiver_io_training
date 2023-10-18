@@ -1,7 +1,7 @@
 # EKS GPU and Trainuim Perceiver IO training 
-Perceiver IO is a generalization of Perceiver to handle arbitrary outputs and arbitrary inputs. This example shows how to produce multimodal videos with audio using the [Kinetics](https://www.deepmind.com/open-source/kinetics) dataset on [AWS Trainium](https://aws.amazon.com/machine-learning/trainium/) and [EC2 GPU](https://aws.amazon.com/nvidia/) instances orchestrated by [EKS](https://aws.amazon.com/eks/) and launched by [Karpenter](https://karpenter.sh)
+Perceiver IO is a generalization of Perceiver to handle arbitrary outputs and arbitrary inputs. This example shows how to produce multimodal videos with audio using the [Kinetics](https://www.deepmind.com/open-source/kinetics) dataset on [AWS Trainium](https://aws.amazon.com/machine-learning/trainium/) and [EC2 GPU](https://aws.amazon.com/nvidia/) instances orchestrated by [EKS](https://aws.amazon.com/eks/) and launched by [Karpenter](https://karpenter.sh). 
 
-It is necessary to plan your application's build-time, deployment-time, and run-time to make it flexible with CPU and AI accelerators.   
+It is necessary to plan your application's build-time, deployment-time, and run-time to make it flexible with CPU and AI accelerators. We used [PerceiverForMultimodalAutoencoding sample](https://github.com/aws-neuron/aws-neuron-samples/blob/master/torch-neuronx/inference/hf_pretrained_perceiver_multimodal_inference.ipynb) notebook to demonstrate to compile and run the HuggingFace Multimodal Perceiver model to classify and autoencode video inputs on Neuron along with GPU version. 
 
 To emphesize the build-time considurations, we started with a standalone instance (trn1n, p4d, g5) that downloads the kinetics datasets to the instance local NVMe SSD storage, prepares the data, train and evaluate a model. Later, we enabled the training to resume from interruptions by storing the dataset and training state on [Amazon FSx](https://aws.amazon.com/fsx/) to resolve data loading and performance bottlenecks. Finally, we use [Volcano](https://volcano.sh), a Kubernetes native batch scheduler, to improve training orchestration.   
 
@@ -31,6 +31,7 @@ At deploy-time, we use Karpenter to simplify deployment by specifying a single d
 
 ## Build the perceiver IO image
 The build process creates OCI images for x86-based instances. You add another build step to create OCI images for Graviton-based instances. This new build process creates a OCI image manifest list that references both OCI images. The container runtime (Docker Engine or containerd) will pull the correct platform-specific image at deployment time. To automate the OCI image build process, we use AWS CodePipeline. AWS CodePipeline starts by building a OCI image from the code in AWS CodeBuild that is pushed to Amazon Elastic Container Registry (Amazon ECR). 
+
 ![build process](./img/app-build-process.png)
 
 * [Deploy the CI-pipeline of the perceiver IO image](./ci-build)

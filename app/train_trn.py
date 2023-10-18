@@ -188,6 +188,12 @@ def train():
       torch.nn.utils.clip_grad_norm_(model.parameters(), max_grad_norm)  # Gradient clipping is not in AdamW anymore
       xm.optimizer_step(optimizer)
       global_step += 1
+      print('Checkpointing...', flush=True)
+      chkpt_file = os.path.join("/", "ckpt_{}.pt".format(global_step))
+      model_to_save = model.module if hasattr(model, 'module') else model
+      data = {'model': model_to_save.state_dict(),'epoch': epoch}
+      cpu_data = xm._maybe_convert_to_cpu(data)
+      print('Checkpointing done...', flush=True)
       if is_root:
         step_throughput = throughput.get_throughput()
         logger.train_throughputs.append(step_throughput)
@@ -202,6 +208,7 @@ def train():
             writer)
       if global_step >= FLAGS.max_steps:
         xm.mark_step()
+        torch.save(cpu_data, chkpt_file)
         break
     return global_step, loss
 
