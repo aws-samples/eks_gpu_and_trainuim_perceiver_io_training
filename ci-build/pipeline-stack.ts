@@ -14,12 +14,10 @@ export class PipelineStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
   const BASE_REPO = new CfnParameter(this,"BASEREPO",{type:"String"});
-  const BASE_IMAGE_TAG = new CfnParameter(this,"BASEIMAGETAG",{type:"String"});
-
   const BASE_IMAGE_AMD_XLA_TAG = new CfnParameter(this,"BASEIMAGEAMDXLATAG",{type:"String"});
   const BASE_IMAGE_AMD_CUD_TAG = new CfnParameter(this,"BASEIMAGEAMDCUDTAG",{type:"String"});
-  const IMAGE_AMD_XLA_TAG = new CfnParameter(this,"IMAGE_AMD_XLA_TAG",{type:"String"});
-  const IMAGE_AMD_CUD_TAG = new CfnParameter(this,"IMAGE_AMD_XLA_TAG",{type:"String"});
+  const IMAGE_AMD_XLA_TAG = new CfnParameter(this,"IMAGEAMDXLATAG",{type:"String"});
+  const IMAGE_AMD_CUD_TAG = new CfnParameter(this,"IMAGEAMDCUDTAG",{type:"String"});
   const GITHUB_OAUTH_TOKEN = new CfnParameter(this,"GITHUBOAUTHTOKEN",{type:"String"});
   const GITHUB_USER = new CfnParameter(this,"GITHUBUSER",{type:"String"});
   const GITHUB_REPO = new CfnParameter(this,"GITHUBREPO",{type:"String"});
@@ -75,7 +73,7 @@ export class PipelineStack extends Stack {
               `export AWS_ACCOUNT_ID="${this.account}"`,
               `export AWS_REGION="${this.region}"`,
               `export BASE_REPO="${BASE_REPO.valueAsString}"`,
-              `export IMAGE_AMD_CUD_TAG="${IMAGE_AMD_CUD_TAG.valueAsString}"`,
+              `export IMAGE_TAG="${IMAGE_AMD_CUD_TAG.valueAsString}"`,
               `export BASE_IMAGE_TAG="${BASE_IMAGE_AMD_CUD_TAG.valueAsString}"`,
               `cd app`,
               `chmod +x ./build.sh && ./build.sh`
@@ -107,7 +105,7 @@ export class PipelineStack extends Stack {
               `export AWS_ACCOUNT_ID="${this.account}"`,
               `export AWS_REGION="${this.region}"`,
               `export BASE_REPO="${BASE_REPO.valueAsString}"`,
-              `export IMAGE_AMD_XLA_TAG="${IMAGE_AMD_XLA_TAG.valueAsString}"`,
+              `export IMAGE_TAG="${IMAGE_AMD_XLA_TAG.valueAsString}"`,
               `export BASE_IMAGE_TAG="${BASE_IMAGE_AMD_XLA_TAG.valueAsString}"`,
               `cd app`,
               `chmod +x ./build.sh && ./build.sh`
@@ -121,43 +119,9 @@ export class PipelineStack extends Stack {
     ),
   });
 
-  const base_image_assembly = new codebuild.Project(this, `BaseImageAmdBuildAssembly`, {
-    environment: {privileged:true,buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_ARM_2},
-    cache: codebuild.Cache.local(codebuild.LocalCacheMode.DOCKER_LAYER, codebuild.LocalCacheMode.CUSTOM),
-    role: buildRole,
-    buildSpec: codebuild.BuildSpec.fromObject(
-      {
-        version: "0.2",
-        env: {
-          'exported-variables': [
-            'AWS_ACCOUNT_ID','AWS_REGION','BASE_REPO','BASE_IMAGE_AMD_TAG','BASE_IMAGE_ARM_TAG','BASE_IMAGE_TAG'
-          ],
-        },
-        phases: {
-          build: {
-            commands: [
-              `export AWS_ACCOUNT_ID="${this.account}"`,
-              `export AWS_REGION="${this.region}"`,
-              `export BASE_REPO="${BASE_REPO.valueAsString}"`,
-              `export BASE_IMAGE_AMD_TAG="${BASE_IMAGE_AMD_TAG.valueAsString}"`,
-              `export BASE_IMAGE_ARM_TAG="${BASE_IMAGE_ARM_TAG.valueAsString}"`,
-              `export BASE_IMAGE_TAG="${BASE_IMAGE_TAG.valueAsString}"`,
-              `cd app`,
-              `chmod +x ./assemble_multiarch_image.sh && ./assemble_multiarch_image.sh`
-            ],
-          }
-        },
-        artifacts: {
-          files: ['imageDetail.json']
-        },
-      }
-    ),
-  });
-    
   //we allow the buildProject principal to push images to ecr
   base_registry.grantPullPush(base_image_amd_xla_build.grantPrincipal);
   base_registry.grantPullPush(base_image_amd_cud_build.grantPrincipal);
-  //base_registry.grantPullPush(base_image_assembly.grantPrincipal);
 
   // here we define our pipeline and put together the assembly line
   const sourceOutput = new codepipeline.Artifact();
@@ -192,14 +156,8 @@ export class PipelineStack extends Stack {
         input: sourceOutput,
         runOrder: 1,
         project: base_image_amd_cud_build
-      })/*,
-      new codepipeline_actions.CodeBuildAction({
-          actionName: 'AssembleBaseBuilds',
-          input: sourceOutput,
-          runOrder: 2,
-          project: base_image_assembly
-        })
-    ]*/
+      })
+    ]
   });
   }
 }
