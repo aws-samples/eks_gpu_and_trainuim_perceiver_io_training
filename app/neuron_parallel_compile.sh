@@ -8,7 +8,6 @@ XLA_USE_BF16=1 NEURON_CC_FLAGS='--retry_failed_compilation --internal-max-instru
   --num_workers 2 \
   --log_steps 4 \
   --num_epochs 1 \
-  --steps_this_run 5 \
   --batch_size $BATCH_SIZE \
-  --max_steps $MAX_STEPS\
+  --max_steps 5 \
   --lr 1e-5
