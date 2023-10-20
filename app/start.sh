@@ -32,7 +32,7 @@ if [[ $instance_type == "trn1n.32xlarge" ]]; then
   echo "export PATH=/opt/aws/neuron/bin:\$PATH" >> /root/.bashrc
   echo "export TERM=screen" >> /root/.bashrc
   . /root/.bashrc
-  /neuron_parallel_compile.sh
+  #/neuron_parallel_compile.sh
   /train_kinetics_trn.sh
 elif [[ $instance_type == "g5.xlarge" ]]; then
   /train_kinetics_gpu.sh
