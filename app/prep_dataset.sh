@@ -9,15 +9,19 @@ mv /kinetics.py /datasets
 # donwload the Kinetic dataset that starts with the latter a (index 0-18)
 # TODO generalize for all content - copy to FSx
 
-mkdir -p $DATASET_DIR/train
-mkdir -p $DATASET_DIR/val
+cd /
 mkdir -p /root/.torch/vision/datasets/kinetics/
 aws s3 cp s3://deepmind-kinetics/1723303957.pt /root/.torch/vision/datasets/kinetics/
 aws s3 cp s3://deepmind-kinetics/c785d04824.pt /root/.torch/vision/datasets/kinetics/
 mkdir -p /var/tmp/neuron-compile-cache
 aws s3 cp s3://deepmind-kinetics/var_tmp_neuron-compile-cache.tar.gz /
-cd /
 tar -xvzf var_tmp_neuron-compile-cache.tar.gz
+mkdir -p /tmp/neuroncc_compile_workdir
+aws s3 cp s3://deepmind-kinetics/tmp-neuroncc_compile_workdir.tar.gz
+tar -xvzf tmp-neuroncc_compile_workdir.tar.gz
+
+mkdir -p $DATASET_DIR/train
+mkdir -p $DATASET_DIR/val
 cd $DATASET_DIR/train
 
 for (( i=1;i<=9;i++ )); do wget -q "https://s3.amazonaws.com/kinetics/700_2020/train/k700_train_00"$i".tar.gz"; tar xzf "k700_train_00"$i".tar.gz"; done
