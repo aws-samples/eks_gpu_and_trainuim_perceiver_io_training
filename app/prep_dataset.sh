@@ -17,7 +17,7 @@ mkdir -p /var/tmp/neuron-compile-cache
 aws s3 cp s3://deepmind-kinetics/var_tmp_neuron-compile-cache.tar.gz /
 tar -xvzf var_tmp_neuron-compile-cache.tar.gz
 mkdir -p /tmp/neuroncc_compile_workdir
-aws s3 cp s3://deepmind-kinetics/tmp-neuroncc_compile_workdir.tar.gz
+aws s3 cp s3://deepmind-kinetics/tmp-neuroncc_compile_workdir.tar.gz /
 tar -xvzf tmp-neuroncc_compile_workdir.tar.gz
 
 mkdir -p $DATASET_DIR/train
