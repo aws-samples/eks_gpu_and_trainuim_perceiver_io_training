@@ -32,11 +32,11 @@ if [[ $instance_type == "trn1n.32xlarge" ]]; then
   echo "export PATH=/opt/aws/neuron/bin:\$PATH" >> /root/.bashrc
   echo "export TERM=screen" >> /root/.bashrc
   . /root/.bashrc
-  /neuron_parallel_compile.sh
-  /train_kinetics_trn.sh
+  time /neuron_parallel_compile.sh
+  time /train_kinetics_trn.sh
+  time find / -name "*ckpt*.pt" -exec aws s3 cp {} s3://deepmind-kinetics \;
 elif [[ $instance_type == "g5.xlarge" ]]; then
-  /train_kinetics_gpu.sh
-  find / -name "*ckpt*.pt" -exec aws s3 cp {} s3://deepmind-kinetics \;
+  time /train_kinetics_gpu.sh
 else
   echo $instance_type" is not supported"
   exit
