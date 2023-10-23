@@ -36,6 +36,7 @@ if [[ $instance_type == "trn1n.32xlarge" ]]; then
   /train_kinetics_trn.sh
 elif [[ $instance_type == "g5.xlarge" ]]; then
   /train_kinetics_gpu.sh
+  find / -name "*ckpt*.pt" -exec aws s3 cp {} s3://deepmind-kinetics \;
 else
   echo $instance_type" is not supported"
   exit
