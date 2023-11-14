@@ -2,7 +2,15 @@ FROM $BASE_IMAGE
 
 RUN uname -a
 RUN apt-get update --fix-missing
-RUN apt-get install -y wget gnupg2
+# Set pip repository pointing to the Neuron repository
+RUN python -m pip config set global.extra-index-url https://pip.repos.neuron.amazonaws.com
+# Install wget, awscli
+RUN python -m pip install wget
+RUN python -m pip install awscli
+RUN apt-get install -y gnupg2
+# Install Neuron Compiler and Framework
+RUN python -m pip install neuronx-cc==2.* torch-neuronx torchvision
+RUN env TOKENIZERS_PARALLELISM=True
 ADD requirements.txt /requirements.txt
 
 COPY * /
