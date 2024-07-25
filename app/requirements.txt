@@ -11,6 +11,6 @@ pyyaml
 scipy
 simplejson>=3.19.1
 tensorboard
-torch==1.13.1
+torch==2.2.0
 torchvision==0.14.1
 transformers>=4.29.2
