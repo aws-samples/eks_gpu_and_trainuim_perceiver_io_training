@@ -58,3 +58,48 @@ This repository is organized into several directories. Here’s exactly what eac
 
 - **requirements.txt**  
   Lists all required Python dependencies for the project.
+
+
+## ⚙️ Quickstart
+
+1. **Launch a Trn1 instance** with AWS Deep Learning Containers (DLC) and Neuron SDK pre-installed.
+2. **Install Python dependencies:**
+   ```bash
+   pip install --upgrade pip
+   pip config set global.extra-index-url https://pip.repos.neuron.amazonaws.com
+   pip install --upgrade neuronx-cc transformers_neuronx neuronx_distributed transformers torch-neuronx accelerate triton protobuf sentence_transformers
+   git clone -b v0.6.x-neuron https://github.com/aws-neuron/upstreaming-to-vllm.git
+   cd upstreaming-to-vllm
+   pip install -r requirements-neuron.txt
+   VLLM_TARGET_DEVICE="neuron" && pip install -e .
+   pip install --upgrade "transformers==4.45.2"
+   ```
+
+   **Clone the Repository**  
+   ```bash
+   git clone https://github.com/yourusername/coldstart-recs-on-aws-trainium.git
+   cd coldstart-recs-on-aws-trainium
+   ```
+
+3. **Run the Jupyter Notebooks**  
+   Start Jupyter Notebook to run the interactive examples:
+   ```bash
+   jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root
+   ```
+   Then, execute the notebooks in this order:
+   - **01_expand_interests.ipynb**: Generate expanded user interests using vLLM.
+   - **02_encode_and_index.ipynb**: Create embeddings and build FAISS indices.
+   - **03_recommend_and_compare.ipynb**: Retrieve recommendations and compare results from multiple LLMs.
+
+4. **Run the Inference Script (Optional)**  
+   You can also run the standalone inference script:
+   ```bash
+   python scripts/neuron_inference.py
+   ```
+
+5. **Benchmarking (Optional)**  
+   To measure performance using NeuronPerf, run:
+   ```bash
+   python scripts/benchmark_perf.py
+   ```
+
