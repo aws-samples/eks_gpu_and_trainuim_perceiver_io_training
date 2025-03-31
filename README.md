@@ -17,3 +17,44 @@ End-to-end solution for cold-start recommendations using **vLLM**, **DeepSeek LL
 
 ## 📦 Project Structure
 
+Below is a super-clear, copy-paste version for your README.md's **Project Structure** section:
+
+---
+
+## Project Structure
+
+This repository is organized into several directories. Here’s exactly what each folder/file does:
+
+- **notebooks/**
+  - **01_expand_interests.ipynb**  
+    Uses vLLM to generate expanded user interests from minimal input.
+  - **02_encode_and_index.ipynb**  
+    Converts interests and content into embeddings and builds FAISS indices.
+  - **03_recommend_and_compare.ipynb**  
+    Retrieves recommendations using FAISS and compares outputs from different LLMs.
+
+- **data/**
+  - **books_df.pkl**  
+    Preprocessed Amazon Books dataset (reviews and metadata).
+  - Additional `.pkl` files contain precomputed embeddings and expanded interest outputs.
+
+- **faiss_indices/**
+  - Files ending with `_st_faiss.index`  
+    FAISS index files built using SentenceTransformer embeddings.
+  - Files ending with `_t5_faiss.index`  
+    FAISS index files built using T5 encoder embeddings.
+
+- **models/**
+  - Contains configuration files and (optional) checkpoints for embedding models (e.g., SentenceTransformers).
+
+- **scripts/**
+  - **neuron_inference.py**  
+    Script to run vLLM with NeuronX Distributed on AWS Trainium.
+  - **benchmark_perf.py**  
+    (Optional) Script to benchmark inference performance using NeuronPerf.
+
+- **README.md**  
+  This documentation file.
+
+- **requirements.txt**  
+  Lists all required Python dependencies for the project.
