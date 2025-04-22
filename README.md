@@ -17,9 +17,7 @@ End-to-end solution for cold-start recommendations using **vLLM**, **DeepSeek LL
 
 ## 📦 Project Structure
 
-This repository is organized into several directories. Here’s exactly what each folder/file does:
-
-- **notebook/**
+- **notebooks/**
   - **BookExpanSim.ipynb**  
     Uses vLLM to generate expanded user interests from minimal input.
     Converts interests and content into embeddings and builds FAISS indices.
@@ -30,6 +28,8 @@ This repository is organized into several directories. Here’s exactly what eac
     Script to compile `meta-llama/Llama-3.2-1B`, `meta-llama/Llama-3.2-3B`, `meta-llama/Llama-3.1-8B-Instruct` and `deepseek-ai/DeepSeek-R1-Distill-Llama-70B` LLMs using vLLM with NeuronX Distributed on AWS Trainium.
   - **expand_interest_generate_faiss_index.sh**
     Script to expand user interest with FAISS index creation
+  - **cell_*.py** 
+    Cell scripts that expands user interest and similarity index creation
 
 
 ## ⚙️ Quickstart
@@ -58,10 +58,6 @@ This repository is organized into several directories. Here’s exactly what eac
    ```bash
    jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root
    ```
-   Then, execute the notebooks in this order:
-   - **01_expand_interests.ipynb**: Generate expanded user interests using vLLM.
-   - **02_encode_and_index.ipynb**: Create embeddings and build FAISS indices.
-   - **03_recommend_and_compare.ipynb**: Retrieve recommendations and compare results from multiple LLMs.
 
 4. **Run the model compile script**  
    Run the script:
@@ -75,3 +71,5 @@ This repository is organized into several directories. Here’s exactly what eac
    expand_interest_generate_faiss_index.sh > expand_interest_generate_faiss_index.log 2>&1 &
    ```
 
+6. Then, execute the scrupts and cell in the notebooks in this order:
+   - **.BookExpanSim.ipynb**: Retrieve recommendations and compare results from multiple LLMs.
