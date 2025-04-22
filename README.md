@@ -17,47 +17,19 @@ End-to-end solution for cold-start recommendations using **vLLM**, **DeepSeek LL
 
 ## 📦 Project Structure
 
-Below is a super-clear, copy-paste version for your README.md's **Project Structure** section:
-
----
-
-## Project Structure
-
 This repository is organized into several directories. Here’s exactly what each folder/file does:
 
-- **notebooks/**
-  - **01_expand_interests.ipynb**  
+- **notebook/**
+  - **BookExpanSim.ipynb**  
     Uses vLLM to generate expanded user interests from minimal input.
-  - **02_encode_and_index.ipynb**  
     Converts interests and content into embeddings and builds FAISS indices.
-  - **03_recommend_and_compare.ipynb**  
     Retrieves recommendations using FAISS and compares outputs from different LLMs.
 
-- **data/**
-  - **books_df.pkl**  
-    Preprocessed Amazon Books dataset (reviews and metadata).
-  - Additional `.pkl` files contain precomputed embeddings and expanded interest outputs.
-
-- **faiss_indices/**
-  - Files ending with `_st_faiss.index`  
-    FAISS index files built using SentenceTransformer embeddings.
-  - Files ending with `_t5_faiss.index`  
-    FAISS index files built using T5 encoder embeddings.
-
-- **models/**
-  - Contains configuration files and (optional) checkpoints for embedding models (e.g., SentenceTransformers).
-
 - **scripts/**
-  - **neuron_inference.py**  
-    Script to run vLLM with NeuronX Distributed on AWS Trainium.
-  - **benchmark_perf.py**  
-    (Optional) Script to benchmark inference performance using NeuronPerf.
-
-- **README.md**  
-  This documentation file.
-
-- **requirements.txt**  
-  Lists all required Python dependencies for the project.
+  - **compile_llm_and_encoders.sh**
+    Script to compile `meta-llama/Llama-3.2-1B`, `meta-llama/Llama-3.2-3B`, `meta-llama/Llama-3.1-8B-Instruct` and `deepseek-ai/DeepSeek-R1-Distill-Llama-70B` LLMs using vLLM with NeuronX Distributed on AWS Trainium.
+  - **expand_interest_generate_faiss_index.sh**
+    Script to expand user interest with FAISS index creation
 
 
 ## ⚙️ Quickstart
@@ -77,7 +49,7 @@ This repository is organized into several directories. Here’s exactly what eac
 
    **Clone the Repository**  
    ```bash
-   git clone https://github.com/yourusername/coldstart-recs-on-aws-trainium.git
+   git clone https://github.com/aws-samples/coldstart-recs-on-aws-trainium.git
    cd coldstart-recs-on-aws-trainium
    ```
 
@@ -91,15 +63,15 @@ This repository is organized into several directories. Here’s exactly what eac
    - **02_encode_and_index.ipynb**: Create embeddings and build FAISS indices.
    - **03_recommend_and_compare.ipynb**: Retrieve recommendations and compare results from multiple LLMs.
 
-4. **Run the Inference Script (Optional)**  
-   You can also run the standalone inference script:
+4. **Run the model compile script**  
+   Run the script:
    ```bash
-   python scripts/neuron_inference.py
+   compile_llm_and_encoders.sh > compile_llm_and_encoders.log 2>&1 &
    ```
 
-5. **Benchmarking (Optional)**  
-   To measure performance using NeuronPerf, run:
+5. **Run the user interest expansion script**
+   Edit the `NROWS` to the desired number of rows to include from the Amazon Book Review Dataset
    ```bash
-   python scripts/benchmark_perf.py
+   expand_interest_generate_faiss_index.sh > expand_interest_generate_faiss_index.log 2>&1 &
    ```
 

@@ -1,0 +1,7 @@
+model: "deepseek-ai/DeepSeek-R1-Distill-Llama-70B"
+tensor_parallel_size: 32
+max_num_seqs: 1
+max_model_len: 2048
+override_neuron_config:
+  skip_warmup: true
+device: "neuron"

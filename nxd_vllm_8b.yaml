@@ -1,0 +1,7 @@
+model: "meta-llama/Llama-3.1-8B-Instruct"
+tensor_parallel_size: 8
+max_num_seqs: 1
+max_model_len: 2048
+override_neuron_config:
+  skip_warmup: true
+device: "neuron"
