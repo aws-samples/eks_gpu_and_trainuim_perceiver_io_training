@@ -1,4 +1,4 @@
-# ML Blog DRAFT - Solving the Cold-Start Problem in Recommendations with vLLM on AWS Trainium 
+# Solving the Cold-Start Problem in Recommendations with vLLM on AWS Trainium 
 
 **Introduction: The Cold‑Start Challenge**
 Cold start is a critical pain point in recommendation engines: without historical behavior, new users or items get lumped into “generic” buckets, hurting engagement and retention. Traditional approaches like collaborative filtering or matrix factorization simply don’t have enough signal to personalize effectively, and popularity‑based fallbacks often feel stale. What if you could synthesize richer user profiles on day one—without waiting weeks for interaction data? We propose using large language models (LLMs) to enrich sparse user interest profiles via zero‑shot reasoning, enabling meaningful recommendations without extensive per‑user training.
