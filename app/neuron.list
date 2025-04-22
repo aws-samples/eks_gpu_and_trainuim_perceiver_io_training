@@ -1,1 +1,0 @@
-deb https://apt.repos.neuron.amazonaws.com ${VERSION_CODENAME} main
