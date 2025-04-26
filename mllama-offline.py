@@ -1,3 +1,5 @@
+import math
+import time
 import torch
 import os
 import sys
@@ -10,7 +12,6 @@ from huggingface_hub import create_repo,upload_folder,login,snapshot_download
 
 hf_token = os.environ['HUGGINGFACE_TOKEN'].strip()
 repo_id=os.environ['MODEL_ID']
-repo_dir=repo_id
 os.environ['NEURON_COMPILED_ARTIFACTS']=repo_id
 os.environ['VLLM_NEURON_FRAMEWORK']='neuronx-distributed-inference'
 login(hf_token,add_to_git_credential=True)
@@ -24,15 +25,30 @@ with open(config_path, 'r') as f:
     model_vllm_config_yaml = f.read()
 
 model_vllm_config = yaml.safe_load(model_vllm_config_yaml)
-llm_model = LLM(**model_vllm_config)
 
-sampling_params = SamplingParams(top_k=1, temperature=1.0, max_tokens=64)
-prompt = "What is Annapurna Labs?"
-print(f"Running inference with prompt: '{prompt}'")
-outputs = llm_model.generate([prompt], sampling_params)
-for output in outputs:
-  print("Prompt:", output.prompt)
-  print("Generated text:", output.outputs[0].text)
+class LatencyCollector:
+    def __init__(self):
+        self.latency_list = []
+
+    def record(self, latency_sec):
+        self.latency_list.append(latency_sec)
+
+    def percentile(self, percent):
+        if not self.latency_list:
+            return 0.0
+        latency_list = sorted(self.latency_list)
+        pos_float = len(latency_list) * percent / 100
+        max_pos = len(latency_list) - 1
+        pos_floor = min(math.floor(pos_float), max_pos)
+        pos_ceil = min(math.ceil(pos_float), max_pos)
+        return latency_list[pos_ceil] if pos_float - pos_floor > 0.5 else latency_list[pos_floor]
+
+    def report(self, test_name="Batch Inference"):
+        print(f"\n📊 LATENCY REPORT for {test_name}")
+        for p in [0, 50, 90, 95, 99, 100]:
+            value = self.percentile(p) * 1000
+            print(f"Latency P{p}: {value:.2f} ms")
+
 
 def get_image(image_url):
     image = Image.open(requests.get(image_url, stream=True).raw)
@@ -77,17 +93,25 @@ def print_outputs(outputs):
         print(f"Prompt: {prompt!r}, Generated text: {generated_text!r}")
 
 
+llm_model = LLM(**model_vllm_config)
+latency_collector = LatencyCollector()
+
 assert len(PROMPTS) == len(IMAGES) == len(SAMPLING_PARAMS), \
 f"""Text, image prompts and sampling parameters should have the same batch size,
     got {len(PROMPTS)}, {len(IMAGES)}, and {len(SAMPLING_PARAMS)}"""
 
 batched_inputs = []
 batched_sample_params = []
-for pmpt, img, params in zip(PROMPTS, IMAGES, SAMPLING_PARAMS):
+for i in range(1,21):
+  for pmpt, img, params in zip(PROMPTS, IMAGES, SAMPLING_PARAMS):
         inputs, sampling_params = get_VLLM_mllama_model_inputs(pmpt, img, params)
         # test batch-size = 1
+        start_time = time.time()
         outputs = llm_model.generate(inputs, sampling_params)
+        latency_sec = time.time() - start_time
+        latency_collector.record(latency_sec)
         print_outputs(outputs)
         batched_inputs.append(inputs)
         batched_sample_params.append(sampling_params)
 
+latency_collector.report("MLLAMA")
