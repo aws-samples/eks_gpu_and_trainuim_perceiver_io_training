@@ -2,7 +2,7 @@ import os
 from huggingface_hub import create_repo,upload_folder,login
 
 hf_token=os.environ['HUGGINGFACE_TOKEN'].strip()
-repo_id=os.environ['REPO_ID']
+repo_id=os.environ['MODEL_ID']
 login(hf_token, add_to_git_credential=True)
 
 def push_compiled_model_to_hf(

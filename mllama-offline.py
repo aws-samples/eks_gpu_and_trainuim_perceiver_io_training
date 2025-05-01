@@ -102,7 +102,7 @@ f"""Text, image prompts and sampling parameters should have the same batch size,
 
 batched_inputs = []
 batched_sample_params = []
-for i in range(1,21):
+for i in range(1,5):
   for pmpt, img, params in zip(PROMPTS, IMAGES, SAMPLING_PARAMS):
         inputs, sampling_params = get_VLLM_mllama_model_inputs(pmpt, img, params)
         # test batch-size = 1
