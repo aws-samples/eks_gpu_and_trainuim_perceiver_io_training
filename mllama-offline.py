@@ -9,12 +9,15 @@ from PIL import Image
 from vllm import LLM, SamplingParams, TextPrompt
 from neuronx_distributed_inference.models.mllama.utils import add_instruct
 from huggingface_hub import create_repo,upload_folder,login,snapshot_download
+from transformers import AutoTokenizer
 
 hf_token = os.environ['HUGGINGFACE_TOKEN'].strip()
 repo_id=os.environ['MODEL_ID']
 os.environ['NEURON_COMPILED_ARTIFACTS']=repo_id
 os.environ['VLLM_NEURON_FRAMEWORK']='neuronx-distributed-inference'
 login(hf_token,add_to_git_credential=True)
+
+tokenizer = AutoTokenizer.from_pretrained(repo_id, use_fast=True)
 
 if len(sys.argv) <= 1:
     print("Error: Please provide a path to a YAML configuration file.")
@@ -29,9 +32,17 @@ model_vllm_config = yaml.safe_load(model_vllm_config_yaml)
 class LatencyCollector:
     def __init__(self):
         self.latency_list = []
+        self.rps_list= []
+        self.in_tokens_list= []
+        self.out_tokens_list= []
 
-    def record(self, latency_sec):
+
+    def record(self, latency_sec, rps=None, in_tokens=None, out_tokens=None):
         self.latency_list.append(latency_sec)
+        if rps is not None: self.rps_list.append(rps)
+        if in_tokens  is not None: self.in_tokens_list.append(in_tokens)
+        if out_tokens is not None: self.out_tokens_list.append(out_tokens)
+
 
     def percentile(self, percent):
         if not self.latency_list:
@@ -44,11 +55,21 @@ class LatencyCollector:
         return latency_list[pos_ceil] if pos_float - pos_floor > 0.5 else latency_list[pos_floor]
 
     def report(self, test_name="Batch Inference"):
-        print(f"\n📊 LATENCY REPORT for {test_name}")
+        print(f"\n📊 TEST REPORT for {test_name}")
+        total = len(self.latency_list)
         for p in [0, 50, 90, 95, 99, 100]:
             value = self.percentile(p) * 1000
             print(f"Latency P{p}: {value:.2f} ms")
-
+        if self.rps_list:
+            avg_rps = sum(self.rps_list)/total
+            print(f"⏱️  Requests/sec  avg: {avg_rps:.2f},  min: {min(self.rps_list):.2f},  max: {max(self.rps_list):.2f}")
+        if self.in_tokens_list:
+            avg_in = sum(self.in_tokens_list)/total
+            print(f"🔤 Input tokens   avg: {avg_in:.1f},  min: {min(self.in_tokens_list)},  max: {max(self.in_tokens_list)}")
+        if self.out_tokens_list:
+            avg_out = sum(self.out_tokens_list)/total
+            print(f"🔡 Output tokens  avg: {avg_out:.1f},  min: {min(self.out_tokens_list)},  max: {max(self.out_tokens_list)}")
+        print(f"🔢 Total executions: {total}")
 
 def get_image(image_url):
     image = Image.open(requests.get(image_url, stream=True).raw)
@@ -85,6 +106,19 @@ def get_VLLM_mllama_model_inputs(prompt, single_image, sampling_params):
     sampling_params = SamplingParams(**sampling_params)
     return inputs, sampling_params
 
+def warmup_model(model, calls: int = 5,collector=None):
+    """
+    Run a few dummy inferences over all prompt/image pairs
+    to compile kernels and fill caches before measuring.
+    """
+    print(f"🔄 Warming up model with {calls} full passes…")
+    for _ in range(calls):
+        for pmpt, img, params in zip(PROMPTS, IMAGES, SAMPLING_PARAMS):
+            inp, sp = get_VLLM_mllama_model_inputs(pmpt, img, params)
+            _ = model.generate(inp, sp)
+    print("✅ Warm-up complete.\n")
+
+
 def print_outputs(outputs):
     # Print the outputs.
     for output in outputs:
@@ -94,24 +128,40 @@ def print_outputs(outputs):
 
 
 llm_model = LLM(**model_vllm_config)
-latency_collector = LatencyCollector()
 
 assert len(PROMPTS) == len(IMAGES) == len(SAMPLING_PARAMS), \
 f"""Text, image prompts and sampling parameters should have the same batch size,
     got {len(PROMPTS)}, {len(IMAGES)}, and {len(SAMPLING_PARAMS)}"""
+
+warmup_model(llm_model, calls=3)
+latency_collector = LatencyCollector()
+tokenizer= AutoTokenizer.from_pretrained(repo_id, use_fast=True)
+in_tokens_list  = []
+out_tokens_list = []
+rps_list        = []
+
+
 
 batched_inputs = []
 batched_sample_params = []
 for i in range(1,5):
   for pmpt, img, params in zip(PROMPTS, IMAGES, SAMPLING_PARAMS):
         inputs, sampling_params = get_VLLM_mllama_model_inputs(pmpt, img, params)
-        # test batch-size = 1
         start_time = time.time()
         outputs = llm_model.generate(inputs, sampling_params)
         latency_sec = time.time() - start_time
-        latency_collector.record(latency_sec)
-        print_outputs(outputs)
-        batched_inputs.append(inputs)
-        batched_sample_params.append(sampling_params)
 
-latency_collector.report("MLLAMA")
+        rps = 1.0/latency_sec if latency_sec>0 else 0.0
+        in_count  = len(tokenizer(pmpt, add_special_tokens=False)["input_ids"])
+        if isinstance(img, Image.Image):
+            patch_size = 16
+            w, h = img.size
+            num_patches = (h // patch_size) * (w // patch_size)
+            in_count += num_patches
+        out_text  = outputs[0].outputs[0].text
+        out_count = len(tokenizer(out_text, add_special_tokens=False)["input_ids"])
+
+        latency_collector.record(latency_sec,rps=rps,in_tokens=in_count, out_tokens=out_count)
+        print_outputs(outputs)
+
+latency_collector.report("yahavb/Llama-3.2-11B-Vision-Instruct")
