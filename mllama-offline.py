@@ -12,12 +12,12 @@ from huggingface_hub import create_repo,upload_folder,login,snapshot_download
 from transformers import AutoTokenizer
 
 hf_token = os.environ['HUGGINGFACE_TOKEN'].strip()
-repo_id=os.environ['MODEL_ID']
-os.environ['NEURON_COMPILED_ARTIFACTS']=repo_id
+model_id=os.environ['MODEL_ID']
+os.environ['NEURON_COMPILED_ARTIFACTS']=model_id
 os.environ['VLLM_NEURON_FRAMEWORK']='neuronx-distributed-inference'
 login(hf_token,add_to_git_credential=True)
 
-tokenizer = AutoTokenizer.from_pretrained(repo_id, use_fast=True)
+tokenizer = AutoTokenizer.from_pretrained(model_id, use_fast=True)
 
 if len(sys.argv) <= 1:
     print("Error: Please provide a path to a YAML configuration file.")
@@ -135,15 +135,11 @@ f"""Text, image prompts and sampling parameters should have the same batch size,
 
 warmup_model(llm_model, calls=3)
 latency_collector = LatencyCollector()
-tokenizer= AutoTokenizer.from_pretrained(repo_id, use_fast=True)
+tokenizer= AutoTokenizer.from_pretrained(model_id, use_fast=True)
 in_tokens_list  = []
 out_tokens_list = []
 rps_list        = []
 
-
-
-batched_inputs = []
-batched_sample_params = []
 for i in range(1,5):
   for pmpt, img, params in zip(PROMPTS, IMAGES, SAMPLING_PARAMS):
         inputs, sampling_params = get_VLLM_mllama_model_inputs(pmpt, img, params)
@@ -164,4 +160,4 @@ for i in range(1,5):
         latency_collector.record(latency_sec,rps=rps,in_tokens=in_count, out_tokens=out_count)
         print_outputs(outputs)
 
-latency_collector.report("yahavb/Llama-3.2-11B-Vision-Instruct")
+latency_collector.report(model_id)
